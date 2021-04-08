@@ -1,5 +1,7 @@
 package main.springbook.user;
 
+import main.springbook.user.dao.ConnectionMaker;
+import main.springbook.user.dao.DConnectionMaker;
 import main.springbook.user.dao.UserDao;
 import main.springbook.user.domain.User;
 
@@ -8,10 +10,11 @@ import java.sql.SQLException;
 public class SpringBookApplication {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao();
+        ConnectionMaker connectionMaker = new DConnectionMaker();
+        UserDao dao = new UserDao(connectionMaker);
 
         User user = new User();
-        user.setId("hello");
+        user.setId("hellooo");
         user.setName("world");
         user.setPassword("1234");
 
