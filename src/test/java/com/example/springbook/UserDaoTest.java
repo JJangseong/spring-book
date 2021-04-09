@@ -1,6 +1,5 @@
 package com.example.springbook;
 
-import com.example.springbook.dao.ConnectionMaker;
 import com.example.springbook.dao.user.UserDao;
 import com.example.springbook.domain.User;
 import com.example.springbook.factory.DaoFactory;
