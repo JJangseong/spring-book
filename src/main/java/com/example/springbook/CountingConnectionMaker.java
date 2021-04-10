@@ -8,6 +8,7 @@ import java.sql.SQLException;
 /**
  * DAO가 DB를 얼마나 사용하는지 파악하는 클래스
  */
+
 public class CountingConnectionMaker implements ConnectionMaker {
     int counter = 0;
     private ConnectionMaker realConnectionMaker;
