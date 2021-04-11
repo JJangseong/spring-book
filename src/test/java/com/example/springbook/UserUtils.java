@@ -6,7 +6,7 @@ public class UserUtils {
 
     public static User getUser() {
         User user = new User();
-        user.setId("hello!!!!!");
+        user.setId("hello1");
         user.setName("world");
         user.setPassword("1234");
 
