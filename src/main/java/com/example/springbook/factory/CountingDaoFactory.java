@@ -1,27 +1,36 @@
 package com.example.springbook.factory;
 
-import com.example.springbook.CountingConnectionMaker;
 import com.example.springbook.DConnectionMaker;
 import com.example.springbook.dao.ConnectionMaker;
 import com.example.springbook.dao.user.UserDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-@Configuration
+import javax.sql.DataSource;
+
+//@Configuration
 public class CountingDaoFactory {
-    @Bean
+//    @Bean
     public UserDao userDao() {
         UserDao userDao = new UserDao();
-        userDao.setConnectionMaker(connectionMaker());
+        userDao.setDataSource(dataSource());
         return userDao;
     }
 
-    @Bean
-    public ConnectionMaker connectionMaker() {
-        return new CountingConnectionMaker(realConnectionMaker());
+//    @Bean
+    public DataSource dataSource() {
+        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+
+//        dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
+        dataSource.setUrl("jdbc://mysql://localhost/springbook");
+        dataSource.setUsername("root");
+        dataSource.setPassword("password");
+
+        return dataSource;
     }
 
-    @Bean
+//    @Bean
     public ConnectionMaker realConnectionMaker() {
         return new DConnectionMaker();
     }
