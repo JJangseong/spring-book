@@ -1,5 +1,12 @@
 package com.example.springbook.domain;
 
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     String id;
     String name;
