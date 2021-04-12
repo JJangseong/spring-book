@@ -9,16 +9,16 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
 
-//@Configuration
+@Configuration
 public class CountingDaoFactory {
-//    @Bean
+    @Bean
     public UserDao userDao() {
         UserDao userDao = new UserDao();
         userDao.setDataSource(dataSource());
         return userDao;
     }
 
-//    @Bean
+    @Bean
     public DataSource dataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 
@@ -30,7 +30,7 @@ public class CountingDaoFactory {
         return dataSource;
     }
 
-//    @Bean
+    @Bean
     public ConnectionMaker realConnectionMaker() {
         return new DConnectionMaker();
     }

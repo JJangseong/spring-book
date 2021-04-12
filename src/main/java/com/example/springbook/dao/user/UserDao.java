@@ -1,6 +1,5 @@
 package com.example.springbook.dao.user;
 
-import com.example.springbook.dao.ConnectionMaker;
 import com.example.springbook.domain.User;
 
 import javax.sql.DataSource;
@@ -19,6 +18,7 @@ public class UserDao {
     public void add(User user) throws ClassNotFoundException, SQLException {
         Connection c = dataSource.getConnection();
 
+        System.out.println(dataSource);
         PreparedStatement ps = c.prepareStatement(
                 "insert into users(id, name, password) value(?,?,?)"
         );
