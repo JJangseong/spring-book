@@ -4,9 +4,13 @@ import com.example.springbook.dao.user.UserDao;
 import com.example.springbook.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.SQLException;
 
@@ -15,7 +19,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
+    @Autowired
+    private ApplicationContext context;
+
     private UserDao dao;
     private User user1;
     private User user2;
@@ -23,7 +32,6 @@ public class UserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         this.dao = context.getBean("userDao", UserDao.class);
 
         this.user1 = getUser("user");
