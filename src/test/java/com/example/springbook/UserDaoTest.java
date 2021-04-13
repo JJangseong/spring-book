@@ -17,18 +17,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserDaoTest {
     private UserDao dao;
+    private User user1;
+    private User user2;
+    private User user3;
 
     @BeforeEach
     public void setUp() {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         this.dao = context.getBean("userDao", UserDao.class);
+
+        this.user1 = getUser("user");
+        this.user2 = getUser("user1");
+        this.user3 = getUser("user2");
     }
 
     @Test()
     public void addAndGet() throws SQLException, ClassNotFoundException {
-        User user1 = getUser("user");
-        User user2 = getUser("user1");
-
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
 
@@ -47,9 +51,6 @@ public class UserDaoTest {
 
     @Test
     public void count() throws SQLException, ClassNotFoundException {
-        User user1 = getUser("user");
-        User user2 = getUser("user1");
-        User user3 = getUser("user2");
 
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
