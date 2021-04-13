@@ -2,6 +2,7 @@ package com.example.springbook;
 
 import com.example.springbook.dao.user.UserDao;
 import com.example.springbook.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
@@ -15,19 +16,21 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserDaoTest {
+    private UserDao dao;
+
+    @BeforeEach
+    public void setUp() {
+        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+        this.dao = context.getBean("userDao", UserDao.class);
+    }
 
     @Test()
     public void addAndGet() throws SQLException, ClassNotFoundException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
-
         User user1 = getUser("user");
         User user2 = getUser("user1");
 
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
-
-        assertThrows(EmptyResultDataAccessException.class, () -> dao.get("null"));
 
         dao.add(user1);
         dao.add(user2);
@@ -44,9 +47,6 @@ public class UserDaoTest {
 
     @Test
     public void count() throws SQLException, ClassNotFoundException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
-
         User user1 = getUser("user");
         User user2 = getUser("user1");
         User user3 = getUser("user2");
@@ -62,5 +62,13 @@ public class UserDaoTest {
 
         dao.add(user3);
         assertThat(dao.getCount(), is(3));
+    }
+
+    @Test
+    public void getUserFailure() throws SQLException {
+        dao.deleteAll();
+        assertThat(dao.getCount(), is(0));
+
+        assertThrows(EmptyResultDataAccessException.class, () -> dao.get("null"));
     }
 }
