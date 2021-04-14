@@ -7,12 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static com.example.springbook.UserUtils.getUser;
@@ -21,8 +18,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = "/applicationContext.xml")
-@DirtiesContext
+@ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserDaoTest  {
     @Autowired
     UserDao dao;
@@ -36,9 +32,6 @@ public class UserDaoTest  {
         this.user1 = getUser("user");
         this.user2 = getUser("user1");
         this.user3 = getUser("user2");
-
-        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/springbook", "root", "password", true);
-        dao.setDataSource(dataSource);
     }
 
     @Test()
