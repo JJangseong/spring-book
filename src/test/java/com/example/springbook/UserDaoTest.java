@@ -6,12 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static com.example.springbook.UserUtils.getUser;
@@ -21,22 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/applicationContext.xml")
-public class UserDaoTest {
+@DirtiesContext
+public class UserDaoTest  {
     @Autowired
-    private ApplicationContext context;
+    UserDao dao;
 
-    private UserDao dao;
     private User user1;
     private User user2;
     private User user3;
 
     @BeforeEach
     public void setUp() {
-        this.dao = context.getBean("userDao", UserDao.class);
-
         this.user1 = getUser("user");
         this.user2 = getUser("user1");
         this.user3 = getUser("user2");
+
+        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/springbook", "root", "password", true);
+        dao.setDataSource(dataSource);
     }
 
     @Test()
@@ -80,4 +82,9 @@ public class UserDaoTest {
 
         assertThrows(EmptyResultDataAccessException.class, () -> dao.get("null"));
     }
+
+
+
 }
+
+
