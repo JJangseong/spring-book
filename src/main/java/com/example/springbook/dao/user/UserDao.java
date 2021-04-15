@@ -1,5 +1,6 @@
 package com.example.springbook.dao.user;
 
+import com.example.springbook.dao.StatementStrategy;
 import com.example.springbook.domain.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 
@@ -9,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao {
+abstract public class UserDao {
     private DataSource dataSource;
 
     public void setDataSource(DataSource dataSource) {
@@ -55,35 +56,82 @@ public class UserDao {
         ps.close();
         c.close();
 
-        if(user == null) throw new EmptyResultDataAccessException(1);
+        if (user == null) throw new EmptyResultDataAccessException(1);
 
         return user;
     }
 
     public void deleteAll() throws SQLException {
-        Connection c = dataSource.getConnection();
+        Connection c = null;
+        PreparedStatement ps = null;
 
-        PreparedStatement ps = c.prepareStatement("delete from users");
+        try {
+            c = dataSource.getConnection();
 
-        ps.executeUpdate();
+            StatementStrategy strategy = new DeleteAllStatement();
+            ps = strategy.makePreparedStatement(c);
 
-        ps.close();
-        c.close();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+
+                }
+            }
+
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+
+                }
+            }
+        }
     }
 
     public int getCount() throws SQLException {
-        Connection c = dataSource.getConnection();
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-        PreparedStatement ps = c.prepareStatement("select count(*) from users");
+        try {
+            c = dataSource.getConnection();
+            ps = c.prepareStatement("select count(*) from users");
 
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
 
-        rs.close();
-        ps.close();
-        c.close();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
 
-        return count;
+                }
+            }
+
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+
+                }
+            }
+        }
     }
+
+    abstract protected PreparedStatement makeStatement(Connection c) throws SQLException;
 }
