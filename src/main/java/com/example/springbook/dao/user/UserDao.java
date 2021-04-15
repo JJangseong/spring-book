@@ -10,28 +10,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-abstract public class UserDao {
+public class UserDao {
     private DataSource dataSource;
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = dataSource.getConnection();
-
-        System.out.println(dataSource);
-        PreparedStatement ps = c.prepareStatement(
-                "insert into users(id, name, password) value(?,?,?)"
-        );
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
-
-        ps.executeUpdate();
-
-        ps.close();
-        c.close();
+    public void add(User user) throws SQLException {
+        StatementStrategy st = new AddStatement(user);
+        jdbcContextWithStatementStrategy(st);
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
@@ -62,35 +50,9 @@ abstract public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
+        StatementStrategy st = new DeleteAllStatement();
+        jdbcContextWithStatementStrategy(st);
 
-        try {
-            c = dataSource.getConnection();
-
-            StatementStrategy strategy = new DeleteAllStatement();
-            ps = strategy.makePreparedStatement(c);
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-
-                }
-            }
-
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-
-                }
-            }
-        }
     }
 
     public int getCount() throws SQLException {
@@ -133,5 +95,22 @@ abstract public class UserDao {
         }
     }
 
-    abstract protected PreparedStatement makeStatement(Connection c) throws SQLException;
+    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try {
+            c = dataSource.getConnection();
+
+            ps = stmt.makePreparedStatement(c);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (ps != null) { try { ps.close(); } catch (SQLException e) { } }
+            if (c != null) { try { c.close(); } catch (SQLException e) { } }
+        }
+    }
+
 }
