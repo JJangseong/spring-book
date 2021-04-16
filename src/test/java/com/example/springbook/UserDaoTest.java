@@ -1,6 +1,5 @@
 package com.example.springbook;
 
-import com.example.springbook.dao.JdbcContext;
 import com.example.springbook.dao.user.UserDao;
 import com.example.springbook.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,10 +36,7 @@ public class UserDaoTest  {
 
         dao = new UserDao();
         DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/testdb", "root", "password", true);
-        JdbcContext jc = new JdbcContext();
-        jc.setDataSource(dataSource);
         dao.setDataSource(dataSource);
-        dao.setJdbcContext(jc);
     }
 
     @Test()
