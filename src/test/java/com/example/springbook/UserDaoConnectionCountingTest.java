@@ -1,6 +1,6 @@
 package com.example.springbook;
 
-import com.example.springbook.dao.user.UserDao;
+import com.example.springbook.dao.user.UserDaoJdbc;
 import com.example.springbook.domain.User;
 import com.example.springbook.factory.CountingDaoFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,7 +12,7 @@ import static com.example.springbook.UserUtils.getUser;
 public class UserDaoConnectionCountingTest {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
-        UserDao dao = context.getBean("userDao", UserDao.class);
+        UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
 
         User user = getUser();
         dao.add(user);

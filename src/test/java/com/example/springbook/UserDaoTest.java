@@ -1,6 +1,7 @@
 package com.example.springbook;
 
 import com.example.springbook.dao.user.UserDao;
+import com.example.springbook.dao.user.UserDaoJdbc;
 import com.example.springbook.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class UserDaoTest  {
         this.user2 = getUser("user1");
         this.user3 = getUser("user2");
 
-        dao = new UserDao();
+        dao = new UserDaoJdbc();
         DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/testdb", "root", "password", true);
         dao.setDataSource(dataSource);
     }

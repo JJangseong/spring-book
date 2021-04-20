@@ -1,6 +1,6 @@
 package com.example.springbook.factory;
 
-import com.example.springbook.dao.user.UserDao;
+import com.example.springbook.dao.user.UserDaoJdbc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -10,8 +10,8 @@ import javax.sql.DataSource;
 @Configuration
 public class DaoFactory {
     @Bean
-    public UserDao userDao() {
-        UserDao userDao = new UserDao();
+    public UserDaoJdbc userDao() {
+        UserDaoJdbc userDao = new UserDaoJdbc();
         userDao.setDataSource(dataSource());
         return userDao;
     }
