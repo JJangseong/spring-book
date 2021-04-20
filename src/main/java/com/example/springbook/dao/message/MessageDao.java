@@ -2,7 +2,6 @@ package com.example.springbook.dao.message;
 
 import com.example.springbook.dao.ConnectionMaker;
 import com.example.springbook.domain.Message;
-import com.example.springbook.domain.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

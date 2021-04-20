@@ -1,7 +1,7 @@
 package com.example.springbook.dao.user;
 
 import com.example.springbook.dao.StatementStrategy;
-import com.example.springbook.domain.User;
+import com.example.springbook.domain.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

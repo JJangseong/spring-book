@@ -1,6 +1,6 @@
 package com.example.springbook.dao.user;
 
-import com.example.springbook.domain.User;
+import com.example.springbook.domain.user.User;
 
 import javax.sql.DataSource;
 import java.util.List;

@@ -1,13 +1,14 @@
 package com.example.springbook;
 
 import com.example.springbook.dao.user.UserDao;
-import com.example.springbook.dao.user.UserDaoJdbc;
-import com.example.springbook.domain.User;
+import com.example.springbook.domain.user.Level;
+import com.example.springbook.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -22,8 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-public class UserDaoTest  {
-    UserDao dao;
+public class UserDaoTest {
+    @Autowired
+    private UserDao dao;
+    @Autowired
+    private DataSource dataSource;
 
     private User user1;
     private User user2;
@@ -32,13 +36,13 @@ public class UserDaoTest  {
     @BeforeEach
     public void setUp() {
 
-        this.user1 = getUser("user");
-        this.user2 = getUser("user1");
-        this.user3 = getUser("user2");
+        this.user1 = getUser("user", Level.BASIC, 1, 0);
+        this.user2 = getUser("user1", Level.SILVER, 55, 10);
+        this.user3 = getUser("user2", Level.GOLD, 100, 40);
 
-        dao = new UserDaoJdbc();
-        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/testdb", "root", "password", true);
-        dao.setDataSource(dataSource);
+//        dao = new UserDaoJdbc();
+//        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/testdb", "root", "password", true);
+//        dao.setDataSource(dataSource);
     }
 
     @Test
@@ -51,12 +55,11 @@ public class UserDaoTest  {
         assertThat(dao.getCount(), is(2));
 
         User userGet1 = dao.get(user1.getId());
-        assertThat(user1.getName(), is(userGet1.getName()));
-        assertThat(user1.getPassword(), is(userGet1.getPassword()));
+        checkSameUser(userGet1, user1);
 
         User userGet2 = dao.get(user2.getId());
-        assertThat(user1.getName(), is(userGet2.getName()));
-        assertThat(user1.getPassword(), is(userGet2.getPassword()));
+        checkSameUser(userGet2, user2);
+        
     }
 
     @Test
@@ -109,12 +112,36 @@ public class UserDaoTest  {
         checkSameUser(user3, users3.get(2));
     }
 
+    @Test
+    public void duplicateKey() {
+        dao.deleteAll();
+
+        dao.add(user1);
+        assertThrows(DuplicateKeyException.class, () -> dao.add(user1));
+    }
+
+//    @Test
+//    public void sqlExceptionTranslate() {
+//       dao.deleteAll();
+//        try {
+//            dao.add(user1);
+//            dao.add(user1);
+//        } catch (DuplicateKeyException e) {
+//            SQLException sqlEx = (SQLException) e.getRootCause();
+//            SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
+//
+//            assertThat(set.translate(null, null, sqlEx), is(DuplicateKeyException.class));
+//        }
+//    }
+
     private void checkSameUser(User user1, User user2) {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
         assertThat(user1.getName(), is(user2.getName()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommend(), is(user2.getRecommend()));
     }
-
 
 
 }

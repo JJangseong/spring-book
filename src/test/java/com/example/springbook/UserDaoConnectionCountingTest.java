@@ -1,7 +1,7 @@
 package com.example.springbook;
 
 import com.example.springbook.dao.user.UserDaoJdbc;
-import com.example.springbook.domain.User;
+import com.example.springbook.domain.user.User;
 import com.example.springbook.factory.CountingDaoFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
