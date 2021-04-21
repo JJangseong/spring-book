@@ -157,6 +157,7 @@ public class UserDaoTest {
 //        }
 //    }
 
+
     private void checkSameUser(User user1, User user2) {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
@@ -165,7 +166,6 @@ public class UserDaoTest {
         assertThat(user1.getLogin(), is(user2.getLogin()));
         assertThat(user1.getRecommend(), is(user2.getRecommend()));
     }
-
 
 }
 

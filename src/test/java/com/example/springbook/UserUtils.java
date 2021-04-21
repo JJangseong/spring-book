@@ -3,6 +3,9 @@ package com.example.springbook;
 import com.example.springbook.domain.user.Level;
 import com.example.springbook.domain.user.User;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 public class UserUtils {
 
     public static User getUser() {
@@ -28,4 +31,7 @@ public class UserUtils {
                 .recommend(recommend)
                 .build();
     }
+
+
+
 }
