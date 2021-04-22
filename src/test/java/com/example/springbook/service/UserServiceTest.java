@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.example.springbook.UserUtils.getUser;
+import static com.example.springbook.service.UserService.MIN_LOG_COUNT_FOR_SILVER;
+import static com.example.springbook.service.UserService.MIN_RECOMMEND_FOR_GOLD;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,11 +33,11 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() {
         users = Arrays.asList(
-                getUser("user1", Level.BASIC, 1, 0),
-                getUser("user2", Level.BASIC, 50, 0),
-                getUser("user3", Level.SILVER, 60, 29),
-                getUser("user4", Level.SILVER, 60, 30),
-                getUser("user5", Level.GOLD, 160, 130)
+                getUser("user1", Level.BASIC, MIN_LOG_COUNT_FOR_SILVER-1, 0),
+                getUser("user2", Level.BASIC, MIN_LOG_COUNT_FOR_SILVER, 0),
+                getUser("user3", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD-1),
+                getUser("user4", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
+                getUser("user5", Level.GOLD, 160, Integer.MAX_VALUE)
         );
     }
 
