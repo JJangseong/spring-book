@@ -45,6 +45,7 @@ public class UserDaoTest {
 //        dao.setDataSource(dataSource);
     }
 
+
     @Test
     public void addAndGet() throws SQLException, ClassNotFoundException {
         dao.deleteAll();
