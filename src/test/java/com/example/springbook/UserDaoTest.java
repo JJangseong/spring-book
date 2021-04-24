@@ -39,10 +39,6 @@ public class UserDaoTest {
         this.user1 = getUser("user", Level.BASIC, 1, 0);
         this.user2 = getUser("user1", Level.SILVER, 55, 10);
         this.user3 = getUser("user2", Level.GOLD, 100, 40);
-
-//        dao = new UserDaoJdbc();
-//        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost/testdb", "root", "password", true);
-//        dao.setDataSource(dataSource);
     }
 
 
