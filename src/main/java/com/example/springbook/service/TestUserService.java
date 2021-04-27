@@ -3,7 +3,7 @@ package com.example.springbook.service;
 import com.example.springbook.TestUserServiceException;
 import com.example.springbook.domain.user.User;
 
-class TestUserService extends UserService{
+class TestUserService extends UserServiceImpl {
     private final String id;
 
     public TestUserService(String id) {
