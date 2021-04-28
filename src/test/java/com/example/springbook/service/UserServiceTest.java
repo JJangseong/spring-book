@@ -17,8 +17,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.springbook.service.UserServiceImpl.MIN_LOG_COUNT_FOR_SILVER;
-import static com.example.springbook.service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +24,7 @@ import static org.hamcrest.core.Is.is;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-class UserServiceTest {
+class UserServiceTest extends UserServiceImpl{
     @Autowired
     private UserServiceImpl userServiceImpl;
     @Autowired
@@ -97,15 +95,19 @@ class UserServiceTest {
 
     @Test
     public void upgradeAllOrNothing() throws Exception {
-        UserServiceImpl testUserServiceImpl = new TestUserService(users.get(3).getId());
-        testUserServiceImpl.setUserDao(this.userDao);
-        testUserServiceImpl.setTransactionManager(transactionManager);
-        testUserServiceImpl.setMailSender(mailSender);
+        TestUserService testUserService = new TestUserService(users.get(3).getId());
+        testUserService.setUserDao(this.userDao);
+        testUserService.setMailSender(mailSender);
+
+        UserServiceTx txUserService = new UserServiceTx();
+        txUserService.setTransactionManager(transactionManager);
+        txUserService.setUserService(testUserService);
+
         userDao.deleteAll();
         for (User user : users) userDao.add(user);
 
         try {
-            testUserServiceImpl.upgradeLevels();
+            txUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         } catch (TestUserServiceException e) {
 
