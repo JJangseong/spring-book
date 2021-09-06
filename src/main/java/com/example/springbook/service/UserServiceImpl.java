@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         userDao.add(user);
     }
 
-    public void upgradeLevels() {
+    public void upgradeLevels() throws Exception {
         List<User> users = userDao.getAll();
         for (User user : users) {
             if (canUpgradeLevels(user)) {
