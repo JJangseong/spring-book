@@ -5,11 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Created by marathoner on 2021/09/07
+ * Created by marathoner on 2021/09/09
  */
-public class NUserDao extends UserDao {
+public class DConnectionMaker implements ConnectionMaker {
     @Override
-    public Connection getConnection() throws SQLException, ClassNotFoundException {
+    public Connection makeConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
                 "jdbc:mysql://localhost/springbook", "root", "password"
