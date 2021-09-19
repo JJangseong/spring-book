@@ -8,9 +8,9 @@ import java.sql.*;
  * Created by marathoner on 2021/09/06
  */
 public class UserDao {
-    private final ConnectionMaker connectionMaker;
+    private ConnectionMaker connectionMaker;
 
-    public UserDao(ConnectionMaker connectionMaker) {
+    public void setConnectionMaker(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
@@ -47,5 +47,4 @@ public class UserDao {
 
         return user;
     }
-
 }
